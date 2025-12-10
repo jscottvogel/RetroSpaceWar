@@ -232,7 +232,9 @@ export class GameEngine {
 
         // Check for Ship Death / Game Over
         if (this.ship.isDead) {
-            this.lives -= 1
+            if (this.lives > 0) {
+                this.lives -= 1
+            }
             if (this.onLivesUpdate) this.onLivesUpdate(this.lives)
 
             if (this.lives > 0) {
