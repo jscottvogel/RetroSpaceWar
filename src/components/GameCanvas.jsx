@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { GameEngine } from '../game/GameEngine'
 
-export const GameCanvas = () => {
+export const GameCanvas = ({ onScoreUpdate }) => {
     const canvasRef = useRef(null)
     const engineRef = useRef(null)
 
@@ -13,6 +13,7 @@ export const GameCanvas = () => {
         canvas.height = window.innerHeight
 
         const engine = new GameEngine(canvas)
+        engine.setOnScoreUpdate(onScoreUpdate)
         engineRef.current = engine
         engine.start()
 

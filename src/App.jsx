@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { GameCanvas } from './components/GameCanvas'
 import { UIOverlay } from './components/UIOverlay'
 
 function App() {
+  const [score, setScore] = useState(0)
+
+  // Use callback to avoid re-renders of GameCanvas if not needed, 
+  // though GameCanvas useEffect dependency array is empty so it won't re-init engine anyway.
+  // But good practice.
+  const handleScoreUpdate = useCallback((newScore) => {
+    setScore(newScore)
+  }, [])
+
   return (
     <div
       style={{
@@ -12,8 +21,8 @@ function App() {
         overflow: 'hidden',
       }}
     >
-      <GameCanvas />
-      <UIOverlay />
+      <GameCanvas onScoreUpdate={handleScoreUpdate} />
+      <UIOverlay score={score} />
     </div>
   )
 }

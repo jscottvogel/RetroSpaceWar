@@ -14,6 +14,12 @@ export class GameEngine {
         this.entities = []
         this.star = null
         this.ship = null
+        this.score = 0
+        this.onScoreUpdate = null
+    }
+
+    setOnScoreUpdate(callback) {
+        this.onScoreUpdate = callback
     }
 
     start() {
@@ -118,6 +124,12 @@ export class GameEngine {
                     if (dist < a.radius + b.radius) {
                         a.isDead = true
                         b.isDead = true
+
+                        // Score logic
+                        if (b instanceof Enemy && a.owner === 'player') {
+                            this.score += 100
+                            if (this.onScoreUpdate) this.onScoreUpdate(this.score)
+                        }
 
                         // Explosion
                         for (let k = 0; k < 15; k++) {
