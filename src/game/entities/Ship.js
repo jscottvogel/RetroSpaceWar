@@ -2,6 +2,7 @@ import { Entity } from './Entity'
 import { input } from '../Input'
 import { Projectile } from './Projectile'
 import { Particle } from './Particle'
+import { sounds } from '../SoundManager'
 
 export class Ship extends Entity {
     constructor(x, y) {
@@ -26,6 +27,7 @@ export class Ship extends Entity {
         if (input.isDown('ArrowUp') || input.isDown('KeyW')) {
             this.vx += Math.cos(this.angle) * this.thrust * dt
             this.vy += Math.sin(this.angle) * this.thrust * dt
+            sounds.startThrust()
 
             // Thruster Particles
             if (spawn && Math.random() < 0.5) {
@@ -40,6 +42,8 @@ export class Ship extends Entity {
                     0.3
                 ))
             }
+        } else {
+            sounds.stopThrust()
         }
 
         super.update(dt)
@@ -60,6 +64,7 @@ export class Ship extends Entity {
                 const noseX = this.x + Math.cos(this.angle) * 10
                 const noseY = this.y + Math.sin(this.angle) * 10
                 spawn(new Projectile(noseX, noseY, this.angle, 'player'))
+                sounds.playShoot()
 
                 // Recoil
                 this.vx -= Math.cos(this.angle) * 10

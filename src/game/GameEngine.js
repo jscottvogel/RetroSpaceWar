@@ -4,6 +4,7 @@ import { Star } from './entities/Star'
 import { Enemy } from './entities/Enemy'
 import { Projectile } from './entities/Projectile'
 import { Particle } from './entities/Particle'
+import { sounds } from './SoundManager'
 
 export class GameEngine {
     constructor(canvas) {
@@ -124,6 +125,7 @@ export class GameEngine {
                     if (dist < a.radius + b.radius) {
                         a.isDead = true
                         b.isDead = true
+                        sounds.playExplosion()
 
                         // Score logic
                         if (b instanceof Enemy && a.owner === 'player') {
