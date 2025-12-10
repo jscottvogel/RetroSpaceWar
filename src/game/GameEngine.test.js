@@ -66,4 +66,27 @@ describe('GameEngine', () => {
         expect(engine.lives).toBe(0)
         expect(onGameOver).toHaveBeenCalled()
     })
+
+    it('ship crashing into sun decrements lives and respawns (Fix Verification)', () => {
+        const engine = new GameEngine(mockCanvas)
+        engine.reset()
+
+        // Move ship to sun position (center)
+        engine.ship.x = 400
+        engine.ship.y = 300
+        engine.ship.vx = 0
+        engine.ship.vy = 0
+
+        // Mock callbacks
+        const onLivesUpdate = vi.fn()
+        engine.setOnLivesUpdate(onLivesUpdate)
+
+        // Run one update frame
+        engine.update(0.1)
+
+        expect(engine.lives).toBe(2)
+        expect(onLivesUpdate).toHaveBeenCalledWith(2)
+        expect(engine.ship.isDead).toBe(false)
+        expect(engine.entities).toContain(engine.ship) // Regression check
+    })
 })

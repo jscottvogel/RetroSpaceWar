@@ -242,6 +242,7 @@ export class GameEngine {
                 this.ship.vx = 200
                 this.ship.vy = 0
                 this.ship.angle = 0
+                this.entities.push(this.ship)
                 // Brief invulnerability or push enemies away?
                 // For now just basic reset.
             } else {
