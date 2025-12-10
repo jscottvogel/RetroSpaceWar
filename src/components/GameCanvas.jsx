@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { GameEngine } from '../game/GameEngine'
 
-export const GameCanvas = ({ onScoreUpdate, onGameOver, paused, resetTrigger }) => {
+export const GameCanvas = ({ onScoreUpdate, onLivesUpdate, onGameOver, paused, resetTrigger }) => {
     const canvasRef = useRef(null)
     const engineRef = useRef(null)
 
@@ -15,6 +15,7 @@ export const GameCanvas = ({ onScoreUpdate, onGameOver, paused, resetTrigger }) 
 
         const engine = new GameEngine(canvas)
         engine.setOnScoreUpdate(onScoreUpdate)
+        engine.setOnLivesUpdate(onLivesUpdate)
         engine.setOnGameOver(onGameOver)
         engineRef.current = engine
         engine.start()
@@ -30,7 +31,7 @@ export const GameCanvas = ({ onScoreUpdate, onGameOver, paused, resetTrigger }) 
             engine.stop()
             window.removeEventListener('resize', handleResize)
         }
-    }, [])
+    }, [onScoreUpdate, onLivesUpdate, onGameOver])
 
     // Handle Paused
     useEffect(() => {

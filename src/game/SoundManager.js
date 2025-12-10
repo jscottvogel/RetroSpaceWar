@@ -1,3 +1,6 @@
+/**
+ * Manages Web Audio API context and synthesized sound effects.
+ */
 export class SoundManager {
     constructor() {
         this.ctx = new (window.AudioContext || window.webkitAudioContext)()

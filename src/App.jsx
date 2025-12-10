@@ -4,11 +4,16 @@ import { UIOverlay } from './components/UIOverlay'
 
 function App() {
   const [score, setScore] = useState(0)
+  const [lives, setLives] = useState(3)
   const [gameState, setGameState] = useState('MENU') // MENU, PLAYING, PAUSED, GAMEOVER
   const [resetTrigger, setResetTrigger] = useState(0)
 
   const handleScoreUpdate = useCallback((newScore) => {
     setScore(newScore)
+  }, [])
+
+  const handleLivesUpdate = useCallback((newLives) => {
+    setLives(newLives)
   }, [])
 
   const handleGameOver = useCallback(() => {
@@ -52,12 +57,14 @@ function App() {
     >
       <GameCanvas
         onScoreUpdate={handleScoreUpdate}
+        onLivesUpdate={handleLivesUpdate}
         onGameOver={handleGameOver}
         paused={gameState !== 'PLAYING'}
         resetTrigger={resetTrigger}
       />
       <UIOverlay
         score={score}
+        lives={lives}
         gameState={gameState}
         onStart={handleStart}
         onResume={handleResume}

@@ -1,7 +1,15 @@
 import { Entity } from './Entity'
 import { Projectile } from './Projectile'
 
+/**
+ * Enemy AI Ship.
+ * Tracks the player and fires projectiles.
+ */
 export class Enemy extends Entity {
+    /**
+     * @param {number} x - Initial X coordinate.
+     * @param {number} y - Initial Y coordinate.
+     */
     constructor(x, y) {
         super(x, y)
         this.radius = 15

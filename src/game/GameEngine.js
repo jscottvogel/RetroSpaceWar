@@ -1,4 +1,3 @@
-import { input } from './Input'
 import { Ship } from './entities/Ship'
 import { Star } from './entities/Star'
 import { Enemy } from './entities/Enemy'
@@ -6,7 +5,13 @@ import { Projectile } from './entities/Projectile'
 import { Particle } from './entities/Particle'
 import { sounds } from './SoundManager'
 
+/**
+ * Core game engine managing the game loop, entities, and state.
+ */
 export class GameEngine {
+    /**
+     * @param {HTMLCanvasElement} canvas - The canvas element to render to.
+     */
     constructor(canvas) {
         this.canvas = canvas
         this.ctx = canvas.getContext('2d')
@@ -18,17 +23,30 @@ export class GameEngine {
         this.score = 0
         this.onScoreUpdate = null
         this.onGameOver = null
+        this.onLivesUpdate = null
         this.paused = false
+        this.lives = 3
     }
 
     setOnScoreUpdate(callback) {
         this.onScoreUpdate = callback
     }
 
+    setOnLivesUpdate(callback) {
+        this.onLivesUpdate = callback
+    }
+
+    /**
+     * Sets the callback function for game over events.
+     * @param {function(): void} callback - The function to call when the game ends.
+     */
     setOnGameOver(callback) {
         this.onGameOver = callback
     }
 
+    /**
+     * Start the game loop.
+     */
     start() {
         this.isRunning = true
         this.paused = false
@@ -37,10 +55,15 @@ export class GameEngine {
         requestAnimationFrame(this.loop.bind(this))
     }
 
+    /**
+     * Reset the game state, respawning ship and enemies.
+     */
     reset() {
         const { width, height } = this.canvas
         this.score = 0
+        this.lives = 3
         if (this.onScoreUpdate) this.onScoreUpdate(0)
+        if (this.onLivesUpdate) this.onLivesUpdate(3)
 
         // Spawn Entities
         this.star = new Star(width / 2, height / 2)
@@ -55,10 +78,17 @@ export class GameEngine {
         this.entities.push(enemy)
     }
 
+    /**
+     * Stop the game loop.
+     */
     stop() {
         this.isRunning = false
     }
 
+    /**
+     * Set the pause state.
+     * @param {boolean} val - True to pause, false to resume.
+     */
     setPaused(val) {
         this.paused = val
         if (!val) {
@@ -66,6 +96,10 @@ export class GameEngine {
         }
     }
 
+    /**
+     * Main game loop.
+     * @param {number} timestamp - Current time from requestAnimationFrame.
+     */
     loop(timestamp) {
         if (!this.isRunning) return
 
@@ -89,6 +123,10 @@ export class GameEngine {
         requestAnimationFrame(this.loop.bind(this))
     }
 
+    /**
+     * Update all game entities.
+     * @param {number} dt - Delta time in seconds.
+     */
     update(dt) {
         const { width, height } = this.canvas
         const bounds = { width, height }
@@ -190,8 +228,31 @@ export class GameEngine {
                 this.entities.push(enemy)
             }
         }
+
+        // Check for Ship Death / Game Over
+        if (this.ship.isDead) {
+            this.lives -= 1
+            if (this.onLivesUpdate) this.onLivesUpdate(this.lives)
+
+            if (this.lives > 0) {
+                // Respawn Logic
+                this.ship.isDead = false
+                this.ship.x = width / 2
+                this.ship.y = height / 2 - 250
+                this.ship.vx = 200
+                this.ship.vy = 0
+                this.ship.angle = 0
+                // Brief invulnerability or push enemies away?
+                // For now just basic reset.
+            } else {
+                if (this.onGameOver) this.onGameOver()
+            }
+        }
     }
 
+    /**
+     * Render the game state to the canvas.
+     */
     render() {
         const { width, height } = this.canvas
         this.ctx.clearRect(0, 0, width, height)

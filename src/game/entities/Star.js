@@ -1,6 +1,13 @@
 import { Entity } from './Entity'
 
+/**
+ * Central Star entity that exerts gravity.
+ */
 export class Star extends Entity {
+    /**
+     * @param {number} x - X coordinate.
+     * @param {number} y - Y coordinate.
+     */
     constructor(x, y) {
         super(x, y)
         this.radius = 25

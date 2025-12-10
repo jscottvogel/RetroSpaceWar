@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const UIOverlay = ({ score, gameState, onStart, onResume, onRestart }) => {
+export const UIOverlay = ({ score, lives, gameState, onStart, onResume, onRestart }) => {
     return (
         <div
             className="ui-overlay"
@@ -27,6 +27,7 @@ export const UIOverlay = ({ score, gameState, onStart, onResume, onRestart }) =>
                 <div>
                     <h1 style={{ margin: 0, fontSize: '24px' }}>RETRO SPACE WAR</h1>
                     <div id="score">SCORE: {score.toString().padStart(6, '0')}</div>
+                    <div id="lives" style={{ color: '#00ff00' }}>LIVES: {lives}</div>
                 </div>
                 <div id="status">HULL: 100%</div>
             </div>

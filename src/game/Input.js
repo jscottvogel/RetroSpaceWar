@@ -1,3 +1,6 @@
+/**
+ * Handles keyboard input state.
+ */
 export class InputHandler {
     constructor() {
         this.keys = new Set()

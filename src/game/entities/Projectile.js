@@ -1,6 +1,15 @@
 import { Entity } from './Entity'
 
+/**
+ * Projectile fired by ships.
+ */
 export class Projectile extends Entity {
+    /**
+     * @param {number} x - Start X coordinate.
+     * @param {number} y - Start Y coordinate.
+     * @param {number} angle - Firing angle in radians.
+     * @param {string} owner - 'player' or 'enemy'.
+     */
     constructor(x, y, angle, owner) {
         super(x, y)
         this.owner = owner // 'player' | 'enemy'

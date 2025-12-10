@@ -1,6 +1,17 @@
 import { Entity } from './Entity'
 
+/**
+ * Visual particle effect.
+ */
 export class Particle extends Entity {
+    /**
+     * @param {number} x - X coordinate.
+     * @param {number} y - Y coordinate.
+     * @param {number} vx - Velocity X.
+     * @param {number} vy - Velocity Y.
+     * @param {string} color - CSS color string.
+     * @param {number} life - Lifetime in seconds.
+     */
     constructor(x, y, vx, vy, color, life) {
         super(x, y)
         this.vx = vx

@@ -4,7 +4,15 @@ import { Projectile } from './Projectile'
 import { Particle } from './Particle'
 import { sounds } from '../SoundManager'
 
+/**
+ * Player Ship entity.
+ * Handles inputs, movement, and firing.
+ */
 export class Ship extends Entity {
+    /**
+     * @param {number} x - Initial X coordinate.
+     * @param {number} y - Initial Y coordinate.
+     */
     constructor(x, y) {
         super(x, y)
         this.radius = 15
