@@ -106,6 +106,11 @@ export class SoundManager {
             this.thrustGain = null
         }
     }
+
+    stopAll() {
+        this.stopThrust()
+        // Stop any other loops if added in future
+    }
 }
 
 export const sounds = new SoundManager()

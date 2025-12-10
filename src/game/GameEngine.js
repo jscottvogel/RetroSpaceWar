@@ -62,6 +62,7 @@ export class GameEngine {
         const { width, height } = this.canvas
         this.score = 0
         this.lives = 3
+        sounds.stopAll()
         if (this.onScoreUpdate) this.onScoreUpdate(0)
         if (this.onLivesUpdate) this.onLivesUpdate(3)
 
@@ -246,6 +247,7 @@ export class GameEngine {
                 // Brief invulnerability or push enemies away?
                 // For now just basic reset.
             } else {
+                sounds.stopAll()
                 if (this.onGameOver) this.onGameOver()
             }
         }
