@@ -48,7 +48,7 @@ export const UIOverlay = ({ score, lives, gameState, onStart, onResume, onRestar
                 }}>
                     {gameState === 'MENU' && (
                         <>
-                            <h1 style={{ fontSize: '4rem', color: '#00f3ff', textShadow: '0 0 20px #00f3ff', marginBottom: '20px' }}>SPACE WAR</h1>
+                            <img src="/logo.png" alt="Retro Space War" style={{ maxWidth: '80%', maxHeight: '40vh', marginBottom: '20px', filter: 'drop-shadow(0 0 20px #00f3ff)' }} />
                             <button onClick={onStart} style={buttonStyle}>START GAME</button>
                         </>
                     )}
