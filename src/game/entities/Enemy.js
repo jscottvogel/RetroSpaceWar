@@ -1,5 +1,6 @@
 import { Entity } from './Entity'
 import { Projectile } from './Projectile'
+import { Particle } from './Particle'
 
 /**
  * Enemy AI Ship.
@@ -82,6 +83,23 @@ export class Enemy extends Entity {
             this.vx += (targetVx - this.vx) * steerFactor
             this.vy += (targetVy - this.vy) * steerFactor
 
+            // Visuals: If accelerating, spawn particles
+            // Simple check: dot product of velocity and heading
+            // Or just always spawn if moving? Let's spawn if speed > threshold
+            const speedSq = this.vx * this.vx + this.vy * this.vy
+            if (spawn && speedSq > 1000 && Math.random() < 0.3) {
+                const pAngle = this.angle + Math.PI + (Math.random() - 0.5) * 0.5
+                const speed = 100
+                spawn(new Particle(
+                    this.x - Math.cos(this.angle) * 10,
+                    this.y - Math.sin(this.angle) * 10,
+                    Math.cos(pAngle) * speed + this.vx,
+                    Math.sin(pAngle) * speed + this.vy,
+                    '#ff0000', // Red exhaust for enemy
+                    0.3
+                ))
+            }
+
             // --- 3. Rotation ---
             // Lerp angle for smoothness
             let diff = targetAngle - this.angle
@@ -127,6 +145,14 @@ export class Enemy extends Entity {
         ctx.lineTo(-5, 0)
         ctx.lineTo(-10, -7)
         ctx.closePath()
+        ctx.stroke()
+
+        // Engine Glow
+        ctx.strokeStyle = '#ff8800'
+        ctx.shadowColor = '#ff8800'
+        ctx.beginPath()
+        ctx.moveTo(-6, 0)
+        ctx.lineTo(-15, 0)
         ctx.stroke()
 
         ctx.restore()
