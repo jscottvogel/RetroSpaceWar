@@ -4,13 +4,42 @@ import { UIOverlay } from './components/UIOverlay'
 
 function App() {
   const [score, setScore] = useState(0)
+  const [gameState, setGameState] = useState('MENU') // MENU, PLAYING, PAUSED, GAMEOVER
+  const [resetTrigger, setResetTrigger] = useState(0)
 
-  // Use callback to avoid re-renders of GameCanvas if not needed, 
-  // though GameCanvas useEffect dependency array is empty so it won't re-init engine anyway.
-  // But good practice.
   const handleScoreUpdate = useCallback((newScore) => {
     setScore(newScore)
   }, [])
+
+  const handleGameOver = useCallback(() => {
+    setGameState('GAMEOVER')
+  }, [])
+
+  const handleStart = () => {
+    setGameState('PLAYING')
+    setResetTrigger(prev => prev + 1)
+  }
+
+  const handleResume = () => {
+    setGameState('PLAYING')
+  }
+
+  const handleRestart = () => {
+    setGameState('PLAYING')
+    setResetTrigger(prev => prev + 1)
+  }
+
+  // Keyboard Pause
+  React.useEffect(() => {
+    const handleDown = (e) => {
+      if (e.code === 'Escape') {
+        if (gameState === 'PLAYING') setGameState('PAUSED')
+        else if (gameState === 'PAUSED') setGameState('PLAYING')
+      }
+    }
+    window.addEventListener('keydown', handleDown)
+    return () => window.removeEventListener('keydown', handleDown)
+  }, [gameState])
 
   return (
     <div
@@ -21,8 +50,19 @@ function App() {
         overflow: 'hidden',
       }}
     >
-      <GameCanvas onScoreUpdate={handleScoreUpdate} />
-      <UIOverlay score={score} />
+      <GameCanvas
+        onScoreUpdate={handleScoreUpdate}
+        onGameOver={handleGameOver}
+        paused={gameState !== 'PLAYING'}
+        resetTrigger={resetTrigger}
+      />
+      <UIOverlay
+        score={score}
+        gameState={gameState}
+        onStart={handleStart}
+        onResume={handleResume}
+        onRestart={handleRestart}
+      />
     </div>
   )
 }

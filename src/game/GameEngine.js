@@ -17,40 +17,63 @@ export class GameEngine {
         this.ship = null
         this.score = 0
         this.onScoreUpdate = null
+        this.onGameOver = null
+        this.paused = false
     }
 
     setOnScoreUpdate(callback) {
         this.onScoreUpdate = callback
     }
 
+    setOnGameOver(callback) {
+        this.onGameOver = callback
+    }
+
     start() {
         this.isRunning = true
+        this.paused = false
         this.lastTime = 0
+        this.reset()
+        requestAnimationFrame(this.loop.bind(this))
+    }
 
+    reset() {
         const { width, height } = this.canvas
+        this.score = 0
+        if (this.onScoreUpdate) this.onScoreUpdate(0)
 
         // Spawn Entities
         this.star = new Star(width / 2, height / 2)
         this.ship = new Ship(width / 2, height / 2 - 250)
-        // Orbital velocity hint
         this.ship.vx = 200
 
         this.entities = [this.star, this.ship]
 
-        // Spawn initial enemy
+        // Initial Enemy
         const enemy = new Enemy(width / 2, height / 2 + 250)
         enemy.vx = -200
         this.entities.push(enemy)
-
-        requestAnimationFrame(this.loop.bind(this))
     }
 
     stop() {
         this.isRunning = false
     }
 
+    setPaused(val) {
+        this.paused = val
+        if (!val) {
+            this.lastTime = 0 // Reset time on resume to avoid jump
+        }
+    }
+
     loop(timestamp) {
         if (!this.isRunning) return
+
+        if (this.paused) {
+            this.lastTime = 0
+            requestAnimationFrame(this.loop.bind(this))
+            return
+        }
 
         if (this.lastTime === 0) {
             this.lastTime = timestamp
